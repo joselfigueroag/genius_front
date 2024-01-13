@@ -1,0 +1,23 @@
+.login-and-register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.error {
+  color: red;
+}
+
+.data-process {
+  justify-content: center;
+  margin-top: 10%;
+}
+
+.logout {
+  border: none;
+  background: none;
+  padding: 0;
+  color: red;
+  font-weight: bold;
+}
