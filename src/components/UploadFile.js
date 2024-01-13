@@ -2,12 +2,14 @@ import { useState } from "react";
 import axios from "axios";
 
 import DetailText from "./DetailText";
+import Loading from "./Loading";
 
 
 function UploadFile() {
   const [file, setFile] = useState(null);
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const formData = new FormData();
   
   const handleSubmit = event => {
@@ -16,15 +18,20 @@ function UploadFile() {
   
   const handleValidateEmotions = () => {
     if(file){
+      setLoading(true);
+
       let headers = {"Authorization": `Token ${localStorage.getItem("token")}`}
       formData.append("file", file);
-
+      
       axios.post("http://localhost:8000/huggingface/api/query_emotion_model/", formData, { headers })
         .then(response => {
           setData(response.data);
         })
         .catch(error => {
           console.log(error);
+        })
+        .finally(() => {
+          setLoading(false);
         })
     } else {
       setError("No se ha seleccionado un archivo.");
@@ -33,6 +40,8 @@ function UploadFile() {
   
   const handleValidateSentiments = () => {
     if(file){
+      setLoading(true);
+
       let headers = {"Authorization": `Token ${localStorage.getItem("token")}`}
       formData.append("file", file);
 
@@ -42,6 +51,9 @@ function UploadFile() {
         })
         .catch(error => {
           console.log(error);
+        })
+        .finally(() => {
+          setLoading(false);
         })
     } else {
       setError("No se ha seleccionado un archivo.");
@@ -65,7 +77,7 @@ function UploadFile() {
       <hr />
       <div className="d-flex justify-content-around">
         {data.length === 0 ? (
-          <span>Resumen</span>
+          <span></span>
         ) : (
           <>
             <span><b>Total:</b> {data.data.length}</span>
@@ -78,21 +90,27 @@ function UploadFile() {
         )}
       </div>
       <hr />
-      <table className="table table-sm table-striped shadow-div table-bordered">
-        <thead>
-          <tr>
-            <th>Texto</th>
-            {data.motive && data.motive === "emotions" ? <th>Emocion</th> : <th>Sentimiento</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {
-            data.data && data.data.map((item, index) => (
-              <DetailText key={index} text={item.text} label={item.label}></DetailText>
-            ))
-          }
-        </tbody>
-      </table>
+      {
+        loading ? (
+          <Loading />
+        ) : (
+          <table className="table table-sm table-striped shadow-div table-bordered">
+            <thead>
+              <tr>
+                <th>Texto</th>
+                {data.motive && data.motive === "emotions" ? <th>Emocion</th> : <th>Sentimiento</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {
+                data.data && data.data.map((item, index) => (
+                  <DetailText key={index} text={item.text} label={item.label}></DetailText>
+                ))
+              }
+            </tbody>
+          </table>
+        )
+      }
     </>
   )
 }
