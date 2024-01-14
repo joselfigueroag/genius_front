@@ -9,7 +9,7 @@ function Home() {
   let handleLogout = () => {
     let headers = {"Authorization": `Token ${localStorage.getItem("token")}`}
 
-    axios.get("http://localhost:8000/authentication/api/logout/", { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/authentication/api/logout/`, { headers })
       .then(response => {
         localStorage.clear();
         return navigate("/")

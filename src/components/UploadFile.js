@@ -11,6 +11,7 @@ function UploadFile() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const formData = new FormData();
+  const apiUrl = process.env.REACT_APP_API_URL
   
   const handleSubmit = event => {
     event.preventDefault();
@@ -23,7 +24,7 @@ function UploadFile() {
       let headers = {"Authorization": `Token ${localStorage.getItem("token")}`}
       formData.append("file", file);
       
-      axios.post("http://localhost:8000/huggingface/api/query_emotion_model/", formData, { headers })
+      axios.post(`${apiUrl}/huggingface/api/query_emotion_model/`, formData, { headers })
         .then(response => {
           setData(response.data);
         })
@@ -45,7 +46,7 @@ function UploadFile() {
       let headers = {"Authorization": `Token ${localStorage.getItem("token")}`}
       formData.append("file", file);
 
-      axios.post("http://localhost:8000/huggingface/api/query_sentiment_model/", formData, { headers })
+      axios.post(`${apiUrl}/huggingface/api/query_sentiment_model/`, formData, { headers })
         .then(response => {
           setData(response.data);
         })

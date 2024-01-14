@@ -16,7 +16,7 @@ function Login() {
       password
     }
 
-    axios.post("http://localhost:8000/authentication/api/login/", data)
+    axios.post(`${process.env.REACT_APP_API_URL}/authentication/api/login/`, data)
       .then(response => {
         localStorage.setItem("email", response.data.email)
         localStorage.setItem("token", response.data.token)

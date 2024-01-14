@@ -16,7 +16,7 @@ function Register() {
       password
     }
 
-    axios.post("http://localhost:8000/authentication/api/user_register/", data)
+    axios.post(`${process.env.REACT_APP_API_URL}/authentication/api/user_register/`, data)
       .then(response => {
         localStorage.setItem("email", response.data.email)
         localStorage.setItem("token", response.data.token)
